@@ -34,7 +34,7 @@ EOF
 }
 
 echo "=== Скрипт настройки Shadowsocks ==="
-read -p "Установить shadowsocks-libev на этот сервер для теста? (да/нет): " answer
+read -p "Установить shadowsocks-libev на этот сервер для теста? (y/n): " answer
 
 # Приводим ответ к нижнему регистру для надежности
 answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')

@@ -1,20 +1,20 @@
 {
     "1":{
-        "name":"🇳🇱 Amsterdam 1",
-        "ip":"this server",
-        "login":"user",
-        "key":"pass1.",
+        "name":"Название сервера с Shadowsocks-libev, отображаемое в боте",
+        "ip":"ip адрес сервера или домен, если он прописан",
+        "login":"пользователь стороннего сервера",
+        "key":"пароль пользователя стороннего сервера для управления по ssh",
         "prtkl":"ss",
         "location":"Amsterdam",
-        "max_amount":10
+        "max_amount":1
     },
     "2":{
-        "name":"🇳🇱 Amsterdam 2",
-        "ip":"this server",
+        "name":"Example",
+        "ip":"xx.xx.xx.xx",
         "login":"user",
-        "key":"pass2",
+        "key":"pass",
         "prtkl":"ss",
-        "location":"Amsterdam",
-        "max_amount":20
+        "location":"The Ramfromufa islands",
+        "max_amount":10
     }
 }
