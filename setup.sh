@@ -41,8 +41,8 @@ answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$answer" == "да" || "$answer" == "y" || "$answer" == "yes" ]]; then
     echo -e "\n[1] Обновление пакетов и установка shadowsocks-libev..."
-#    sudo apt update
-#    sudo apt install -y shadowsocks-libev curl
+    sudo apt update
+    sudo apt install -y shadowsocks-libev curl
 
     echo -e "\n[2] Создание директории для ACL..."
     sudo mkdir -p /etc/shadowsocks-libev/acl
@@ -131,10 +131,10 @@ WantedBy=multi-user.target
 EOF
 
 # Перезапускаем демон systemd, чтобы он увидел новый сервис
-#sudo systemctl daemon-reload
+sudo systemctl daemon-reload
 
 # Включаем автозапуск сервиса при старте системы
-#sudo systemctl enable shadowsockstg.service
+sudo systemctl enable shadowsockstg.service
 
 echo -e "\n[+] Systemd-сервис успешно создан и добавлен в автозапуск."
 echo "Управлять ботом можно командами:"
