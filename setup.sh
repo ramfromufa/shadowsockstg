@@ -33,10 +33,9 @@ EOF
     echo -e "\n[+] Файл servers.json успешно создан в текущей директории."
 }
 
-echo "=== Скрипт настройки Shadowsocks ==="
 read -p "Установить shadowsocks-libev на этот сервер для теста? (y/n): " answer
 
-# Приводим ответ к нижнему регистру для надежности
+# Ответ в нижний регистр для надежности
 answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$answer" == "да" || "$answer" == "y" || "$answer" == "yes" ]]; then
@@ -48,14 +47,13 @@ if [[ "$answer" == "да" || "$answer" == "y" || "$answer" == "yes" ]]; then
     sudo mkdir -p /etc/shadowsocks-libev/acl
 
     echo -e "\n[3] Скачивание файла server_block_chn.acl..."
-    # Скачиваем именно raw-версию файла, чтобы не скачался HTML-код гитхаба
     sudo curl -L "https://raw.githubusercontent.com/shadowsocks/shadowsocks-c/master/acl/server_block_local.acl" -o /etc/shadowsocks-libev/acl/server_block_local.acl
 
     echo -e "\n[4] Сбор данных для servers.json..."
     server_ip=$(get_ip)
     current_user=$(whoami)
 
-    # Запрашиваем пароль от SSH (ввод скрывается для безопасности)
+    # Запрос пароля для SSH (ввод скрывается для безопасности)
     read -sp "Введите пароль пользователя $current_user (для SSH-доступа бота): " ssh_password
     echo "" # Перенос строки после скрытого ввода
 
@@ -66,51 +64,51 @@ else
     
     read -p "Введите IP сервера: " user_ip
     read -p "Введите имя пользователя (логин): " user_login
-    read -p "Введите пароль (ключ): " user_key
-    read -p "Введите название подключения (например: my server): " user_name
+    read -p "Введите пароль (пароль): " user_key
+    read -p "Введите название подключения (например: my server): " server_name
 
-    # Если имя не введено, ставим дефолтное
-    if [ -z "$user_name" ]; then user_name="existing server"; fi
+    # Если название не введено, ставится дефолтное
+    if [ -z "$server_name" ]; then server_name="existing server"; fi
 
-    create_json "$user_ip" "$user_login" "$user_key" "$user_name"
+    create_json "$user_ip" "$user_login" "$user_key" "$server_name"
 fi
 
 echo -e "\n Настройка окружения Python и установка зависимостей..."
 
-# Устанавливаем системные пакеты для виртуального окружения и pip
+# Установка системных пакетов для виртуального окружения и pip
 sudo apt update
 sudo apt install -y python3-venv python3-pip
 
-# Создаем виртуальное окружение в папке со скриптом
+# Создание виртуального окружения в папке со скриптом
 python3 -m venv venv
 
-# Активируем виртуальное окружение
+# Активация виртуального окружения
 source venv/bin/activate
 
-# Обновляем pip внутри окружения (рекомендуется)
+# Обновление pip внутри окружения
 pip install --upgrade pip
 
-# Устанавливаем внешние библиотеки для бота
+# Установка внешних библиотек для бота
 pip install aiogram fabric
 
-# Деактивируем виртуальное окружение
+# Деактивация виртуального окружения
 deactivate
 
 echo -e "\n[+] Виртуальное окружение venv успешно создано, библиотеки установлены."
 
 echo -e "\n Конфигурация Telegram-бота и создание Systemd-сервиса..."
 
-# Запрашиваем токен и ID администраторов
+# Запрос токена и ID администраторов
 read -p "Введите токен вашего Telegram-бота: " bot_token
 read -p "Введите ID администраторов через запятую (например: 123456,789012): " admin_ids
 
-# Автоматически определяем текущего пользователя и путь к папке
+# Автоматическое определение текущего пользователя и пути к папке
 current_user=$(whoami)
 script_dir=$(pwd)
 
 echo "Создание файла службы /etc/systemd/system/shadowsockstg.service..."
 
-# Создаем файл systemd-сервиса
+# Создание файла systemd-сервиса
 sudo tee /etc/systemd/system/shadowsockstg.service > /dev/null <<EOF
 [Unit]
 Description=Telegram Bot
@@ -130,10 +128,10 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-# Перезапускаем демон systemd, чтобы он увидел новый сервис
+# Перезапуск демона systemd, чтобы он увидел новый сервис
 sudo systemctl daemon-reload
 
-# Включаем автозапуск сервиса при старте системы
+# Включение автозапуска сервиса при старте системы
 sudo systemctl enable shadowsockstg.service
 
 echo -e "\n[+] Systemd-сервис успешно создан и добавлен в автозапуск."
